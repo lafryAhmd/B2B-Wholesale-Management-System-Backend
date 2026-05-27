@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockBridge — Create Account</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Serif+Display:ital@0;1&display=swap"
+    rel="stylesheet">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBY7AlbJ0wb3is-TYtX8yJZdNn1mheNyy0&libraries=places&callback=gmapsReady" async
+    defer></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --green: #14532d;
+      --green2: #166534;
+      --green3: #15803d;
+      --teal: #0d9488;
+      --accent: #16a34a;
+      --bg: #f4f7f4;
+      --bg2: #eaefea;
+      --surface: #ffffff;
+      --border: #d1dbd1;
+      --border2: #b8ccb8;
+      --text: #1a2e1a;
+      --muted: #587058;
+      --warm: #f0fdf4;
+      --light: #dcfce7;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ── Top navigation ── */
+    .topnav {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--green);
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 36px;
+      box-shadow: 0 2px 12px rgba(20, 83, 45, 0.2);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .brand-name b {
+      color: #86efac;
+      font-weight: 400;
+    }
+
+    .nav-right {
+      font-size: 0.83rem;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    .nav-right a {
+      color: #86efac;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-right a:hover {
+      color: #fff;
+    }
+
+    /* ── Page wrapper: CENTERED ── */
+    .page-wrap {
+      min-height: calc(100vh - 58px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 24px 60px;
+      background: var(--bg);
+    }
+
+    /* subtle background shapes */
+    .page-wrap::before {
+      content: '';
+      position: fixed;
+      top: 58px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background:
+        radial-gradient(ellipse 55% 40% at 5% 30%, rgba(22, 163, 74, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 95% 70%, rgba(13, 148, 136, 0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .register-shell {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 980px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 22px;
+      position: sticky;
+      top: 80px;
+      box-shadow: 0 2px 12px rgba(20, 83, 45, 0.06);
+    }
+
+    .sidebar-label {
+      font-size: 0.67rem;
+      font-weight: 600;
+      color: #98b098;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 16px;
+    }
+
+    .step-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .step-list li {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 10px;
+      border-radius: 9px;
+      cursor: default;
+      transition: background 0.2s;
+    }
+
+    .step-list li.active {
+      background: var(--light);
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.69rem;
+      font-weight: 700;
+      color: #98b098;
+      flex-shrink: 0;
+      transition: all 0.25s;
+      background: var(--surface);
+    }
+
+    .step-list li.active .step-num {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .step-list li.done .step-num {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: #fff;
+    }
+
+    .step-info {}
+
+    .step-index {
+      font-size: 0.63rem;
+      color: #98b098;
+      margin-bottom: 1px;
+    }
+
+    .step-title {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .step-list li.active .step-title {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .step-list li.done .step-title {
+      color: var(--teal);
+    }
+
+    .sidebar-sep {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .sidebar-note {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 13px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .sidebar-note strong {
+      display: block;
+      font-size: 0.81rem;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    /* ── Main content ── */
+    .main-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 36px 40px 44px;
+      box-shadow: 0 2px 12px rgba(20, 83, 45, 0.06);
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      height: 4px;
+      background: var(--border);
+      border-radius: 4px;
+      margin-bottom: 34px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--teal));
+      border-radius: 4px;
+      transition: width 0.45s ease;
+      width: 25%;
+    }
+
+    .page-head {
+      margin-bottom: 26px;
+    }
+
+    .page-head h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .page-head p {
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* Step panels */
+    .step-page {
+      display: none;
+    }
+
+    .step-page.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Type selector ── */
+    .type-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .type-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      background: var(--surface);
+      position: relative;
+      user-select: none;
+    }
+
+    .type-card:hover {
+      border-color: #86efac;
+      box-shadow: 0 2px 10px rgba(22, 163, 74, 0.08);
+    }
+
+    .type-card.selected {
+      border-color: var(--accent);
+      background: rgba(22, 163, 74, 0.03);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+    }
+
+    .type-card input[type=radio] {
+      display: none;
+    }
+
+    .type-radio-dot {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .type-card.selected .type-radio-dot {
+      border-color: var(--accent);
+      background: var(--accent);
+    }
+
+    .type-card.selected .type-radio-dot::after {
+      content: '';
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      background: #fff;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .type-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .type-card.selected .type-icon {
+      background: rgba(22, 163, 74, 0.1);
+    }
+
+    .type-card h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .type-card p {
+      font-size: 0.77rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── Field styles ── */
+    .section-divider {
+      font-size: 0.67rem;
+      font-weight: 600;
+      color: #98b098;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding-bottom: 10px;
+      border-bottom: 1.5px solid var(--border);
+      margin-bottom: 18px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 0;
+    }
+
+    .span-2 {
+      grid-column: span 2;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .opt {
+      font-size: 0.62rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: #98b098;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 500;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--border2);
+      pointer-events: none;
+      display: flex;
+      transition: color 0.2s;
+    }
+
+    .input-wrap.icon-top .icon {
+      top: 13px;
+      transform: none;
+    }
+
+    .input-wrap input,
+    .input-wrap select,
+    .input-wrap textarea {
+      width: 100%;
+      padding: 11px 12px 11px 37px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .input-wrap textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .no-icon {
+      padding-left: 12px !important;
+    }
+
+    .input-wrap input::placeholder,
+    .input-wrap textarea::placeholder {
+      color: #98b098;
+    }
+
+    .input-wrap input:focus,
+    .input-wrap select:focus,
+    .input-wrap textarea:focus {
+      border-color: var(--accent);
+      background: var(--warm);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+    }
+
+    .input-wrap:focus-within .icon {
+      color: var(--accent);
+    }
+
+    .select-icon::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 4px solid transparent;
+      border-top-color: #98b098;
+      pointer-events: none;
+    }
+
+    /* ── Map section ── */
+    .map-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .map-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+
+    .map-header:hover {
+      background: var(--bg);
+    }
+
+    .map-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .map-ico {
+      width: 32px;
+      height: 32px;
+      background: var(--light);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .map-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .map-sub {
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .map-chevron {
+      color: #98b098;
+      transition: transform 0.25s;
+      flex-shrink: 0;
+    }
+
+    .map-chevron.open {
+      transform: rotate(180deg);
+    }
+
+    .map-body {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .map-body.open {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .map-search-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .map-search-wrap .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #98b098;
+      pointer-events: none;
+      display: flex;
+    }
+
+    #map-search-input {
+      width: 100%;
+      padding: 11px 12px 11px 37px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    #map-search-input::placeholder {
+      color: #98b098;
+    }
+
+    #map-search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+      background: var(--warm);
+    }
+
+    #map-container {
+      width: 100%;
+      height: 250px;
+      border-radius: 9px;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .map-placeholder-inner {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #98b098;
+    }
+
+    .map-placeholder-inner p {
+      font-size: 0.82rem;
+    }
+
+    .map-placeholder-inner small {
+      font-size: 0.72rem;
+      color: #b8ccb8;
+    }
+
+    #gmap {
+      width: 100%;
+      height: 100%;
+      display: none;
+    }
+
+    .autofill-notice {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: rgba(13, 148, 136, 0.06);
+      border: 1px solid rgba(13, 148, 136, 0.18);
+      border-radius: 8px;
+      padding: 9px 13px;
+      font-size: 0.79rem;
+      font-weight: 500;
+      color: var(--teal);
+      margin-top: 10px;
+    }
+
+    .autofill-notice.show {
+      display: flex;
+    }
+
+    .map-tip {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.75rem;
+      color: #98b098;
+      margin-top: 9px;
+    }
+
+    .map-tip span {
+      width: 5px;
+      height: 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── Password strength ── */
+    .pw-wrap {
+      position: relative;
+    }
+
+    .pw-eye {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #98b098;
+      display: flex;
+      padding: 2px;
+      transition: color 0.2s;
+    }
+
+    .pw-eye:hover {
+      color: var(--accent);
+    }
+
+    .strength-bars {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      margin-top: 7px;
+    }
+
+    .s-bar {
+      flex: 1;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      transition: background 0.3s;
+    }
+
+    .s-text {
+      font-size: 0.7rem;
+      color: #98b098;
+      min-width: 42px;
+      text-align: right;
+    }
+
+    /* ── Terms ── */
+    .terms-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      padding: 13px;
+    }
+
+    .terms-wrap input[type=checkbox] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 17px;
+      height: 17px;
+      border: 1.5px solid var(--border2);
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 2px;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .terms-wrap input[type=checkbox]:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .terms-wrap input[type=checkbox]:checked::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 0;
+      width: 5px;
+      height: 9px;
+      border: 2px solid #fff;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+
+    .terms-wrap p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .terms-wrap a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* ── Fingerprint enroll ── */
+    .fp-enroll {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.87rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s;
+    }
+
+    .fp-enroll:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--warm);
+    }
+
+    .fp-enroll.done {
+      border-color: var(--teal);
+      color: var(--teal);
+      background: #f0fdfc;
+    }
+
+    .fp-hint {
+      font-size: 0.74rem;
+      color: #98b098;
+      text-align: center;
+      margin-top: 7px;
+    }
+
+    /* ── Nav buttons ── */
+    .form-nav {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-back {
+      padding: 11px 22px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-back:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+
+    .btn-next {
+      flex: 1;
+      padding: 12px;
+      background: var(--green);
+      border: none;
+      border-radius: 9px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+
+    .btn-next:hover {
+      background: var(--green2);
+      box-shadow: 0 5px 16px rgba(20, 83, 45, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-next:active {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ── Success screen ── */
+    .success-wrap {
+      text-align: center;
+      max-width: 440px;
+      margin: 20px auto 0;
+    }
+
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+      box-shadow: 0 6px 24px rgba(22, 163, 74, 0.3);
+    }
+
+    .success-wrap h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    .success-wrap p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .summary-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px 14px;
+    }
+
+    .sum-key {
+      font-size: 0.67rem;
+      font-weight: 600;
+      color: #98b098;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .sum-val {
+      font-size: 0.87rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg)
+      }
+
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    @media (max-width: 900px) {
+      .register-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .main-card {
+        padding: 28px 20px 40px;
+      }
+    }
+
+    @media (max-width: 560px) {
+
+      .type-grid,
+      .field-grid,
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .span-2 {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══ TOP NAV ══ -->
+  <nav class="topnav">
+    <div class="brand">
+      <div class="logo-mark">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M3 6h18M3 12h18M3 18h12" stroke="#fff" stroke-width="2.2" stroke-linecap="round" />
+          <circle cx="20" cy="18" r="2.5" fill="#fff" />
+        </svg>
+      </div>
+      <div class="brand-name">Stock<b>Bridge</b></div>
+    </div>
+    <div class="nav-right">Already registered? <a href="login.html">Sign in</a></div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="register-shell">
+
+      <!-- ══ SIDEBAR ══ -->
+      <aside class="sidebar">
+        <div class="sidebar-label">Registration</div>
+        <ul class="step-list">
+          <li class="active" id="sli-1">
+            <div class="step-num" id="sn-1">1</div>
+            <div class="step-info">
+              <div class="step-index">Step 01</div>
+              <div class="step-title">Account Type</div>
+            </div>
+          </li>
+          <li id="sli-2">
+            <div class="step-num" id="sn-2">2</div>
+            <div class="step-info">
+              <div class="step-index">Step 02</div>
+              <div class="step-title">Business Details</div>
+            </div>
+          </li>
+          <li id="sli-3">
+            <div class="step-num" id="sn-3">3</div>
+            <div class="step-info">
+              <div class="step-index">Step 03</div>
+              <div class="step-title">Security Setup</div>
+            </div>
+          </li>
+          <li id="sli-4">
+            <div class="step-num" id="sn-4">4</div>
+            <div class="step-info">
+              <div class="step-index">Step 04</div>
+              <div class="step-title">Confirmation</div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="sidebar-sep"></div>
+
+        <div class="sidebar-note">
+          <strong>Why StockBridge?</strong>
+          Join 4,200+ businesses trading surplus stock. List inventory, find buyers, and clear stock 3× faster than
+          traditional methods.
+        </div>
+      </aside>
+
+      <!-- ══ MAIN CARD ══ -->
+      <div class="main-card">
+        <form action="/register" method="POST" id="reg-form">
+          <div class="progress-wrap">
+            <div class="progress-bar" id="progress"></div>
+          </div>
+
+          <!-- ─ Step 1: Account Type ─ -->
+          <div class="step-page active" id="page-1">
+            <div class="page-head">
+              <h2>What type of account do you need?</h2>
+              <p>Select the option that best describes your business to get started.</p>
+            </div>
+
+            <div class="type-grid">
+              <label class="type-card selected" id="tc-store">
+                <input type="radio" name="businessType" value="store" checked>
+                <div class="type-radio-dot"></div>
+                <div class="type-icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                </div>
+                <h3>Retail / Wholesale Store</h3>
+                <p>Physical or online stores looking to sell surplus or source additional stock from other businesses.
+                </p>
+              </label>
+
+              <label class="type-card" id="tc-company">
+                <input type="radio" name="businessType" value="company">
+                <div class="type-radio-dot"></div>
+                <div class="type-icon">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" />
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                  </svg>
+                </div>
+                <h3>Company / Enterprise</h3>
+                <p>Multi-location companies or warehouses managing high-volume inventory and bulk stock exchanges.</p>
+              </label>
+            </div>
+
+            <div class="section-divider">Contact Information</div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="r-email">Email Address</label>
+                <div class="input-wrap">
+                  <span class="icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                  </span>
+                  <input type="email" id="r-email" name="email" placeholder="you@company.com">
+                </div>
+              </div>
+              <div class="field">
+                <label for="r-phone">Phone Number</label>
+                <div class="input-wrap">
+                  <span class="icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path
+                        d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.72 3.38 2 2 0 0 1 3.74 1.17h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.06-1.06a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+                    </svg>
+                  </span>
+                  <input type="tel" id="r-phone" name="phone" placeholder="+1 (555) 000-0000">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-nav">
+              <button type="button" class="btn-next" onclick="go(2)">Continue to Business Details →</button>
+            </div>
+          </div>
+
+          <!-- ─ Step 2: Business Details ─ -->
+          <div class="step-page" id="page-2">
+            <div class="page-head">
+              <h2>Tell us about your business</h2>
+              <p>Use Google Maps to auto-fill your address, or enter your details manually below.</p>
+            </div>
+
+            <!-- Map card -->
+            <div class="map-card">
+              <div class="map-header" onclick="toggleMap()">
+                <div class="map-header-left">
+                  <div class="map-ico">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="map-title">
+                      Find on Google Maps
+                      <span class="opt" style="margin-left:6px;">Optional</span>
+                    </div>
+                    <div class="map-sub">Click your location to auto-fill the address form</div>
+                  </div>
+                </div>
+                <svg class="map-chevron" id="map-chev" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </div>
+
+              <div class="map-body" id="map-body">
+                <div class="map-search-wrap">
+                  <span class="icon">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                  </span>
+                  <input type="text" id="map-search-input" placeholder="Search store name or address…">
+                </div>
+
+                <div id="map-container">
+                  <div class="map-placeholder-inner" id="map-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#b8ccb8" stroke-width="1.5">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    <p>Map will appear here</p>
+                    <small>Add your Google Maps API key to enable this feature</small>
+                  </div>
+                  <div id="gmap"></div>
+                </div>
+
+                <div class="autofill-notice" id="autofill-notice">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                  Address fields have been auto-filled from your selected location
+                </div>
+
+                <div class="map-tip">
+                  <span></span>
+                  Click on the map or choose a search result to automatically fill in the fields below
+                </div>
+              </div>
+            </div>
+
+            <div class="section-divider">Business Information</div>
+            <div class="field-grid" style="margin-bottom: 20px;">
+              <div class="field span-2">
+                <label>Business / Store Name</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <rect x="2" y="7" width="20" height="14" rx="2" />
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                    </svg></span>
+                  <input type="text" id="b-name" name="businessName" placeholder="e.g. Metro Electronics Ltd.">
+                </div>
+              </div>
+              <div class="field">
+                <label>Registration / Business No.</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg></span>
+                  <input type="text" id="b-reg" name="registrationNumber" placeholder="BRN-000000">
+                </div>
+              </div>
+              <div class="field">
+                <label>Industry</label>
+                <div class="input-wrap select-icon">
+                  <select id="b-industry" name="industry" class="no-icon">
+                    <option value="" disabled selected>Select industry</option>
+                    <option>Electronics</option>
+                    <option>Apparel &amp; Fashion</option>
+                    <option>Food &amp; Beverages</option>
+                    <option>Industrial Supplies</option>
+                    <option>Pharmaceuticals</option>
+                    <option>Automotive Parts</option>
+                    <option>Construction Materials</option>
+                    <option>Home &amp; Garden</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-divider">Location</div>
+            <div class="field-grid">
+              <div class="field span-2">
+                <label>Street Address</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    </svg></span>
+                  <input type="text" id="b-street" name="street" placeholder="123 Commerce Avenue">
+                </div>
+              </div>
+              <div class="field">
+                <label>City</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <circle cx="12" cy="12" r="10" />
+                    </svg></span>
+                  <input type="text" id="b-city" name="city" placeholder="New York">
+                </div>
+              </div>
+              <div class="field">
+                <label>State / Province</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                    </svg></span>
+                  <input type="text" id="b-state" name="state" placeholder="NY">
+                </div>
+              </div>
+              <div class="field">
+                <label>Postal / ZIP Code</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg></span>
+                  <input type="text" id="b-zip" name="zipCode" placeholder="10001">
+                </div>
+              </div>
+              <div class="field">
+                <label>Country</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="2" y1="12" x2="22" y2="12" />
+                      <path
+                        d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg></span>
+                  <input type="text" id="b-country" name="country" placeholder="United States">
+                </div>
+              </div>
+              <div class="field span-2">
+                <label>Business Description <span class="opt">Optional</span></label>
+                <div class="input-wrap icon-top">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <line x1="8" y1="6" x2="21" y2="6" />
+                      <line x1="8" y1="12" x2="21" y2="12" />
+                      <line x1="8" y1="18" x2="21" y2="18" />
+                      <line x1="3" y1="6" x2="3.01" y2="6" />
+                      <line x1="3" y1="12" x2="3.01" y2="12" />
+                      <line x1="3" y1="18" x2="3.01" y2="18" />
+                    </svg></span>
+                  <textarea id="b-desc" name="description" class="no-icon"
+                    placeholder="Describe what your business sells or what type of stock you trade…"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-nav">
+              <button type="button" class="btn-back" onclick="go(1)">← Back</button>
+              <button type="button" class="btn-next" onclick="go(3)">Continue to Security →</button>
+            </div>
+          </div>
+
+          <!-- ─ Step 3: Security ─ -->
+          <div class="step-page" id="page-3">
+            <div class="page-head">
+              <h2>Secure your account</h2>
+              <p>Set your login credentials. You can optionally enroll a fingerprint for faster sign-in.</p>
+            </div>
+
+            <div class="section-divider">Credentials</div>
+            <div class="field-grid" style="margin-bottom: 20px;">
+              <div class="field">
+                <label>Full Name (Owner / Admin)</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg></span>
+                  <input type="text" id="s-name" name="ownerName" placeholder="Your full legal name">
+                </div>
+              </div>
+              <div class="field">
+                <label>Username</label>
+                <div class="input-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <circle cx="12" cy="12" r="4" />
+                      <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" />
+                    </svg></span>
+                  <input type="text" id="s-user" name="username" placeholder="@your_handle">
+                </div>
+              </div>
+              <div class="field">
+                <label>Password</label>
+                <div class="input-wrap pw-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg></span>
+                  <input type="password" id="s-pw" name="password" placeholder="Min. 8 characters"
+                    oninput="updateStrength(this.value)">
+                  <button class="pw-eye" type="button" onclick="toggleSecPw()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                  </button>
+                </div>
+                <div class="strength-bars">
+                  <div class="s-bar" id="bar1"></div>
+                  <div class="s-bar" id="bar2"></div>
+                  <div class="s-bar" id="bar3"></div>
+                  <div class="s-bar" id="bar4"></div>
+                  <div class="s-text" id="s-label">—</div>
+                </div>
+              </div>
+              <div class="field">
+                <label>Confirm Password</label>
+                <div class="input-wrap pw-wrap">
+                  <span class="icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg></span>
+                  <input type="password" id="s-pw2" placeholder="Repeat your password">
+                </div>
+              </div>
+            </div>
+
+            <div class="section-divider">Biometric Login <span class="opt"
+                style="margin-left:6px;font-size:.62rem;">Optional</span></div>
+
+            <button type="button" class="fp-enroll" id="fp-enroll-btn" onclick="enrollFp()">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 1a11 11 0 0 0-8.82 17.6" />
+                <path d="M12 7a5 5 0 0 1 5 5" />
+                <path d="M12 7a5 5 0 0 0-4.9 4" />
+                <path d="M8 12a4 4 0 0 0 4 4" />
+                <path d="M12 3a9 9 0 0 1 9 9 9 9 0 0 1-2 5.6" />
+              </svg>
+              Enroll Fingerprint for Fast Login
+            </button>
+            <p class="fp-hint">You can also enable this later from your account settings.</p>
+
+            <div class="section-divider" style="margin-top: 24px;">Terms &amp; Conditions</div>
+            <div class="terms-wrap">
+              <input type="checkbox" id="terms-cb">
+              <p>I agree to StockBridge's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I confirm
+                that I am an authorized representative of the registered business entity.</p>
+            </div>
+
+            <div class="form-nav">
+              <button class="btn-back" type="button" onclick="go(2)">← Back</button>
+              <button class="btn-next" type="button" onclick="document.getElementById('reg-form').submit()">Review &amp;
+                Submit →</button>
+            </div>
+          </div>
+          <!-- ─ Step 4: Success ─ -->
+          <div class="step-page" id="page-4">
+            <div class="success-wrap">
+              <div class="success-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <h2>Account Created!</h2>
+              <p>Your business is now live on the StockBridge network. You can start listing inventory and connecting
+                with trading partners right away.</p>
+
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <div class="sum-key">Business Name</div>
+                  <div class="sum-val" id="sum-name">—</div>
+                </div>
+                <div class="summary-item">
+                  <div class="sum-key">Account Type</div>
+                  <div class="sum-val" id="sum-type">—</div>
+                </div>
+                <div class="summary-item">
+                  <div class="sum-key">Email</div>
+                  <div class="sum-val" id="sum-email">—</div>
+                </div>
+                <div class="summary-item">
+                  <div class="sum-key">Location</div>
+                  <div class="sum-val" id="sum-city">—</div>
+                </div>
+              </div>
+
+              <button class="btn-next" onclick="window.location.href='login.html'">Go to Sign In →</button>
+            </div>
+          </div>
+
+        </form>
+      </div><!-- /main-card -->
+    </div><!-- /register-shell -->
+  </div><!-- /page-wrap -->
+
+  <script>
+    const PROGRESS = { 1: '25%', 2: '50%', 3: '75%', 4: '100%' };
+
+    function go(n) {
+      document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + n).classList.add('active');
+      for (let i = 1; i <= 4; i++) {
+        const li = document.getElementById('sli-' + i);
+        const sn = document.getElementById('sn-' + i);
+        li.classList.remove('active', 'done');
+        if (i < n) { li.classList.add('done'); sn.textContent = '✓'; }
+        if (i === n) { li.classList.add('active'); sn.textContent = i; }
+        if (i > n) { sn.textContent = i; }
+      }
+      document.getElementById('progress').style.width = PROGRESS[n];
+      if (n === 4) buildSummary();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.type-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        card.querySelector('input[type=radio]').checked = true;
+      });
+    });
+
+    /* Google Maps */
+    let mapOpen = false, gmapsLoaded = false, gmap = null, gmarker = null, autocomplete = null;
+
+    function gmapsReady() {
+      gmapsLoaded = true;
+      if (mapOpen) initMap();
+    }
+
+    function toggleMap() {
+      mapOpen = !mapOpen;
+      document.getElementById('map-body').classList.toggle('open', mapOpen);
+      document.getElementById('map-chev').classList.toggle('open', mapOpen);
+      if (mapOpen && gmapsLoaded && !gmap) initMap();
+    }
+
+    function initMap() {
+      document.getElementById('map-placeholder').style.display = 'none';
+      document.getElementById('gmap').style.display = 'block';
+      const styles = [
+        { elementType: 'geometry', stylers: [{ color: '#f1f5ee' }] },
+        { elementType: 'labels.text.fill', stylers: [{ color: '#587058' }] },
+        { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+        { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#d1dbd1' }] },
+        { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#c8e6c0' }] },
+        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+        { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+      ];
+      gmap = new google.maps.Map(document.getElementById('gmap'), { center: { lat: 40.7128, lng: -74.006 }, zoom: 12, styles, disableDefaultUI: true, zoomControl: true });
+      autocomplete = new google.maps.places.Autocomplete(document.getElementById('map-search-input'), { types: ['establishment', 'geocode'] });
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) return;
+        gmap.panTo(place.geometry.location); gmap.setZoom(17);
+        placeMarker(place.geometry.location); fillFromPlace(place);
+      });
+      gmap.addListener('click', e => { placeMarker(e.latLng); reverseGeocode(e.latLng); });
+    }
+
+    function placeMarker(location) {
+      if (gmarker) gmarker.setMap(null);
+      gmarker = new google.maps.Marker({
+        position: location, map: gmap,
+        icon: { path: google.maps.SymbolPath.CIRCLE, scale: 9, fillColor: '#16a34a', fillOpacity: 1, strokeColor: '#ffffff', strokeWeight: 2.5 },
+        animation: google.maps.Animation.DROP
+      });
+    }
+
+    function reverseGeocode(latlng) {
+      new google.maps.Geocoder().geocode({ location: latlng }, (res, status) => {
+        if (status === 'OK' && res[0]) fillFromPlace(res[0]);
+      });
+    }
+
+    function fillFromPlace(place) {
+      const comps = {};
+      (place.address_components || []).forEach(c => c.types.forEach(t => { comps[t] = c; }));
+      const g = (t, short = false) => comps[t] ? (short ? comps[t].short_name : comps[t].long_name) : '';
+      if (place.name) document.getElementById('b-name').value = place.name;
+      const street = [g('street_number'), g('route')].filter(Boolean).join(' ');
+      if (street) document.getElementById('b-street').value = street;
+      const city = g('locality') || g('sublocality_level_1') || g('administrative_area_level_2');
+      if (city) document.getElementById('b-city').value = city;
+      if (g('administrative_area_level_1', true)) document.getElementById('b-state').value = g('administrative_area_level_1', true);
+      if (g('postal_code')) document.getElementById('b-zip').value = g('postal_code');
+      if (g('country')) document.getElementById('b-country').value = g('country');
+      const notice = document.getElementById('autofill-notice');
+      notice.classList.add('show'); setTimeout(() => notice.classList.remove('show'), 4000);
+    }
+
+    /* Password strength */
+    function updateStrength(val) {
+      let score = 0;
+      if (val.length >= 8) score++;
+      if (/[A-Z]/.test(val)) score++;
+      if (/[0-9]/.test(val)) score++;
+      if (/[^A-Za-z0-9]/.test(val)) score++;
+      const colors = ['', '#ef4444', '#f97316', '#eab308', '#16a34a'];
+      const labels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById('bar' + i).style.background = i <= score ? colors[score] : 'var(--border)';
+      }
+      const lbl = document.getElementById('s-label');
+      lbl.textContent = labels[score] || '—';
+      lbl.style.color = colors[score] || '#98b098';
+    }
+
+    function toggleSecPw() {
+      const inp = document.getElementById('s-pw');
+      inp.type = inp.type === 'password' ? 'text' : 'password';
+    }
+
+    /* Fingerprint */
+    function enrollFp() {
+      const btn = document.getElementById('fp-enroll-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.9s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Scanning…`;
+      setTimeout(() => {
+        btn.disabled = false; btn.classList.add('done');
+        btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Fingerprint enrolled successfully`;
+      }, 2800);
+    }
+
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // In case we're redirected back after registered=true
+    if (getQueryParam('registered') === 'true') {
+      go(4);
+    }
+
+    function buildSummary() {
+      const sel = document.querySelector('.type-card.selected input[type=radio]');
+      document.getElementById('sum-name').textContent = document.getElementById('b-name').value || 'Not provided';
+      document.getElementById('sum-type').textContent = sel ? (sel.value.charAt(0).toUpperCase() + sel.value.slice(1)) : '—';
+      document.getElementById('sum-email').textContent = document.getElementById('r-email').value || '—';
+      document.getElementById('sum-city').textContent = document.getElementById('b-city').value || '—';
+    }
+  </script>
+</body>
+
+</html>

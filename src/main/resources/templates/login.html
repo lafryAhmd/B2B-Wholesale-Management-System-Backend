@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockBridge — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green:    #14532d;
+  --green2:   #166534;
+  --green3:   #15803d;
+  --teal:     #0d9488;
+  --accent:   #16a34a;
+  --bg:       #f4f7f4;
+  --bg2:      #eaefea;
+  --surface:  #ffffff;
+  --border:   #d1dbd1;
+  --border2:  #b8ccb8;
+  --text:     #1a2e1a;
+  --muted:    #587058;
+  --warm:     #f0fdf4;
+}
+
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; }
+
+body {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* ═══ LEFT PANEL ═══ */
+.left-panel {
+  width: 44%;
+  min-height: 100vh;
+  background: var(--green);
+  display: flex;
+  flex-direction: column;
+  padding: 48px 52px 44px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.left-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse 70% 60% at 15% 85%, rgba(22,163,74,0.3) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 50% at 85% 10%, rgba(13,148,136,0.2) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.grid-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+}
+
+.stripe {
+  position: absolute; top: 0; right: -80px;
+  width: 180px; height: 100%;
+  background: rgba(255,255,255,0.02);
+  transform: skewX(-8deg); pointer-events: none;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.5s ease both;
+}
+
+.logo-mark {
+  width: 38px; height: 38px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem; color: #fff;
+}
+.brand-name b { color: #86efac; font-weight: 400; }
+
+.panel-body {
+  position: relative; z-index: 1; flex: 1;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 48px 0 32px;
+  animation: fadeUp 0.5s 0.08s ease both;
+}
+
+.panel-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: rgba(134,239,172,0.12);
+  border: 1px solid rgba(134,239,172,0.25);
+  border-radius: 20px; padding: 5px 14px;
+  font-size: 0.72rem; font-weight: 600; color: #86efac;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 26px; width: fit-content;
+}
+
+.panel-tag .dot {
+  width: 6px; height: 6px; background: #4ade80;
+  border-radius: 50%; animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+.panel-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2.7rem; line-height: 1.15;
+  color: #fff; font-weight: 400; margin-bottom: 20px;
+}
+.panel-headline i { color: #86efac; font-style: italic; }
+
+.panel-desc {
+  font-size: 0.92rem; color: rgba(255,255,255,0.5);
+  line-height: 1.8; font-weight: 300;
+  max-width: 320px; margin-bottom: 40px;
+}
+
+.feature-list { display: flex; flex-direction: column; gap: 14px; }
+
+.feature-item {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 0.87rem; color: rgba(255,255,255,0.65);
+}
+
+.feature-icon {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.stats-row {
+  display: flex; gap: 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 28px; margin-top: 40px;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.5s 0.15s ease both;
+}
+
+.stat { flex: 1; padding-right: 20px; }
+.stat:not(:first-child) { padding-left: 20px; border-left: 1px solid rgba(255,255,255,0.08); }
+
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.55rem; color: #fff; margin-bottom: 3px;
+}
+.stat-label {
+  font-size: 0.67rem; color: rgba(255,255,255,0.35);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+/* ═══ RIGHT PANEL ═══ */
+.right-panel {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px 40px; overflow-y: auto;
+  background: var(--surface); position: relative;
+}
+
+.right-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--green3), var(--teal));
+}
+
+.form-wrap {
+  width: 100%; max-width: 390px;
+  animation: fadeUp 0.5s 0.05s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.form-header { margin-bottom: 32px; }
+
+.form-header h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem; color: var(--text);
+  font-weight: 400; margin-bottom: 7px;
+}
+.form-header p { font-size: 0.87rem; color: var(--muted); line-height: 1.6; }
+
+.field { margin-bottom: 16px; }
+
+.field label {
+  display: block; font-size: 0.79rem; font-weight: 600;
+  color: var(--text); margin-bottom: 7px;
+}
+
+.input-wrap { position: relative; }
+
+.input-wrap .icon {
+  position: absolute; left: 13px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--border2); pointer-events: none;
+  display: flex; transition: color 0.2s;
+}
+
+.input-wrap input {
+  width: 100%; padding: 12px 42px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px; color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  -webkit-appearance: none;
+}
+
+.input-wrap input::placeholder { color: #98b098; }
+
+.input-wrap input:focus {
+  border-color: var(--accent);
+  background: var(--warm);
+  box-shadow: 0 0 0 3px rgba(22,163,74,0.1);
+}
+
+.input-wrap:focus-within .icon { color: var(--accent); }
+
+.pw-eye {
+  position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: var(--border2); display: flex; padding: 2px; transition: color 0.2s;
+}
+.pw-eye:hover { color: var(--accent); }
+
+.meta-row {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 20px;
+}
+
+.cb-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.83rem; color: var(--muted); cursor: pointer;
+}
+
+.cb-label input[type=checkbox] {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--border2);
+  border-radius: 4px; cursor: pointer;
+  flex-shrink: 0; position: relative; transition: all 0.2s;
+}
+
+.cb-label input[type=checkbox]:checked {
+  background: var(--accent); border-color: var(--accent);
+}
+
+.cb-label input[type=checkbox]:checked::after {
+  content: ''; position: absolute;
+  left: 3px; top: 0; width: 5px; height: 9px;
+  border: 2px solid #fff; border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+
+.forgot { font-size: 0.82rem; color: var(--accent); text-decoration: none; font-weight: 500; }
+.forgot:hover { color: var(--green); }
+
+.btn-primary {
+  width: 100%; padding: 13px;
+  background: var(--green); border: none;
+  border-radius: 10px; color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.93rem; font-weight: 600; cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+
+.btn-primary:hover {
+  background: var(--green2);
+  box-shadow: 0 6px 20px rgba(20,83,45,0.22);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: none; box-shadow: none; }
+
+.or-row {
+  display: flex; align-items: center; gap: 14px; margin: 20px 0;
+}
+.or-row hr { flex: 1; border: none; border-top: 1.5px solid var(--border); }
+.or-row span { font-size: 0.78rem; color: #98b098; white-space: nowrap; }
+
+.fp-btn {
+  width: 100%; padding: 12px 16px;
+  background: var(--bg); border: 1.5px solid var(--border);
+  border-radius: 10px; color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.87rem; font-weight: 500; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: all 0.2s;
+}
+
+.fp-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--warm); }
+
+.fp-badge {
+  font-size: 0.62rem; background: var(--bg2);
+  border: 1px solid var(--border); border-radius: 4px;
+  padding: 1px 6px; color: #98b098;
+  text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600;
+}
+
+.fp-btn.scanning { border-color: var(--accent); color: var(--accent); pointer-events: none; }
+.fp-btn.verified  { border-color: var(--teal); color: var(--teal); background: #f0fdfc; }
+
+.form-foot {
+  text-align: center; margin-top: 20px;
+  font-size: 0.83rem; color: var(--muted);
+}
+.form-foot a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.form-foot a:hover { text-decoration: underline; }
+
+.trust-row {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  margin-top: 22px; padding-top: 18px;
+  border-top: 1px solid var(--border);
+  font-size: 0.7rem; color: #98b098; letter-spacing: 0.04em;
+}
+.trust-row svg { color: var(--accent); flex-shrink: 0; }
+.trust-row .dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+
+@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+@media (max-width: 860px) {
+  .left-panel { display: none; }
+  .right-panel { padding: 40px 24px; }
+}
+</style>
+</head>
+<body>
+
+<aside class="left-panel">
+  <div class="grid-lines"></div>
+  <div class="stripe"></div>
+
+  <div class="brand">
+    <div class="logo-mark">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M3 6h18M3 12h18M3 18h12" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="20" cy="18" r="2.5" fill="#fff"/>
+      </svg>
+    </div>
+    <div class="brand-name">Stock<b>Bridge</b></div>
+  </div>
+
+  <div class="panel-body">
+    <div class="panel-tag">
+      <div class="dot"></div>
+      B2B Stock Exchange
+    </div>
+
+    <h1 class="panel-headline">
+      Trade surplus.<br>
+      <i>Scale faster.</i>
+    </h1>
+
+    <p class="panel-desc">
+      The professional marketplace where businesses buy, sell, and exchange available inventory — unlocking new revenue and reducing waste.
+    </p>
+
+    <div class="feature-list">
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(134,239,172,0.8)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        Live inventory listings across 4,200+ stores
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(134,239,172,0.8)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        Secure B2B transactions with verified businesses
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(134,239,172,0.8)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        Average stock clearance in under 72 hours
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">4,200+</div><div class="stat-label">Active Stores</div></div>
+    <div class="stat"><div class="stat-num">$2.1B</div><div class="stat-label">Stock Traded</div></div>
+    <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Satisfaction</div></div>
+  </div>
+</aside>
+
+<main class="right-panel">
+  <div class="form-wrap">
+
+    <div class="form-header">
+      <h2>Welcome back</h2>
+      <p>Sign in to your account to manage listings and trade stock.</p>
+    </div>
+
+    <div class="field">
+      <label for="email">Email address</label>
+      <div class="input-wrap">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <input type="email" id="email" placeholder="you@company.com" autocomplete="email">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </span>
+        <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+        <button class="pw-eye" onclick="togglePw()" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="meta-row">
+      <label class="cb-label"><input type="checkbox"> Keep me signed in</label>
+      <a href="#" class="forgot">Forgot password?</a>
+    </div>
+
+    <button class="btn-primary" id="login-btn" onclick="handleLogin()">Sign in to StockBridge</button>
+
+    <div class="or-row"><hr><span>or use biometrics</span><hr></div>
+
+    <button class="fp-btn" id="fp-btn" onclick="handleFp()">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M12 1a11 11 0 0 0-8.82 17.6"/>
+        <path d="M12 7a5 5 0 0 1 5 5"/>
+        <path d="M12 7a5 5 0 0 0-4.9 4"/>
+        <path d="M8 12a4 4 0 0 0 4 4"/>
+        <path d="M12 3a9 9 0 0 1 9 9 9 9 0 0 1-2 5.6"/>
+      </svg>
+      Sign in with Fingerprint
+      <span class="fp-badge">Optional</span>
+    </button>
+
+    <p class="form-foot">New to StockBridge? <a href="register.html">Create an account →</a></p>
+
+    <div class="trust-row">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      256-bit SSL Encrypted <div class="dot"></div> SOC 2 Certified <div class="dot"></div> GDPR Compliant
+    </div>
+
+  </div>
+</main>
+
+<script>
+let pwVisible = false;
+function togglePw() {
+  pwVisible = !pwVisible;
+  document.getElementById('password').type = pwVisible ? 'text' : 'password';
+}
+function handleLogin() {
+  const btn = document.getElementById('login-btn');
+  btn.textContent = 'Signing in…';
+  btn.style.opacity = '0.7';
+  btn.style.pointerEvents = 'none';
+  setTimeout(() => {
+    btn.style.opacity = '1';
+    btn.style.background = '#0d9488';
+    btn.textContent = '✓ Signed in successfully';
+    setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+  }, 1500);
+}
+function handleFp() {
+  const btn = document.getElementById('fp-btn');
+  btn.classList.add('scanning');
+  btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 0.9s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Scanning fingerprint…`;
+  setTimeout(() => {
+    btn.classList.remove('scanning');
+    btn.classList.add('verified');
+    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Identity verified`;
+  }, 2800);
+}
+</script>
+</body>
+</html>

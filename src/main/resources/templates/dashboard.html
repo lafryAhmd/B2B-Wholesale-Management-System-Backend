@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockBridge — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green:    #14532d;
+  --green2:   #166534;
+  --green3:   #15803d;
+  --teal:     #0d9488;
+  --accent:   #16a34a;
+  --bg:       #f4f7f4;
+  --bg2:      #eaefea;
+  --surface:  #ffffff;
+  --border:   #d1dbd1;
+  --border2:  #b8ccb8;
+  --text:     #1a2e1a;
+  --muted:    #587058;
+  --warm:     #f0fdf4;
+  --light:    #dcfce7;
+}
+
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; }
+
+body {
+  display: flex; flex-direction: column;
+  min-height: 100vh; background: var(--bg);
+  color: var(--text);
+}
+
+/* ══ TOPBAR ══ */
+.topbar {
+  background: var(--green); height: 58px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(20,83,45,0.18);
+  position: sticky; top: 0; z-index: 100;
+}
+
+.top-brand { display: flex; align-items: center; gap: 10px; }
+
+.top-logo {
+  width: 30px; height: 30px;
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.top-brand-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem; color: #fff;
+}
+.top-brand-name b { color: #86efac; font-weight: 400; }
+
+.top-nav { display: flex; align-items: center; gap: 2px; }
+
+.top-nav a {
+  padding: 6px 12px; border-radius: 6px;
+  font-size: 0.84rem; font-weight: 500;
+  color: rgba(255,255,255,0.6); text-decoration: none;
+  transition: all 0.18s; display: flex; align-items: center; gap: 5px;
+}
+
+.top-nav a:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.top-nav a.active { background: rgba(255,255,255,0.12); color: #fff; }
+
+.top-right { display: flex; align-items: center; gap: 10px; }
+
+.notif-btn {
+  width: 32px; height: 32px; border-radius: 7px;
+  background: rgba(255,255,255,0.1);
+  border: none; cursor: pointer; color: rgba(255,255,255,0.7);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; transition: background 0.18s;
+}
+.notif-btn:hover { background: rgba(255,255,255,0.18); }
+
+.notif-dot {
+  position: absolute; top: 5px; right: 5px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fbbf24; border: 1.5px solid var(--green);
+}
+
+.user-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px; padding: 5px 10px 5px 7px;
+  cursor: pointer; transition: background 0.18s;
+}
+.user-chip:hover { background: rgba(255,255,255,0.18); }
+
+.user-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: linear-gradient(135deg, #16a34a, #0d9488);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700; color: #fff;
+}
+
+.user-chip-name { font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.85); }
+
+/* ══ LAYOUT ══ */
+.layout {
+  display: flex; flex: 1; overflow: hidden;
+}
+
+/* ══ SIDEBAR ══ */
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar-section { padding: 16px 12px 8px; }
+
+.sidebar-label {
+  font-size: 0.65rem; font-weight: 600; color: #98b098;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  padding: 0 8px; margin-bottom: 6px;
+}
+
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 10px; border-radius: 8px;
+  font-size: 0.84rem; font-weight: 500; color: var(--muted);
+  text-decoration: none; transition: all 0.18s;
+  margin-bottom: 1px; cursor: pointer;
+}
+.nav-item:hover { background: var(--bg); color: var(--text); }
+.nav-item.active { background: var(--light); color: var(--green); }
+.nav-item.active svg { color: var(--accent); }
+.nav-item svg { flex-shrink: 0; }
+
+.nav-count {
+  margin-left: auto; font-size: 0.68rem; font-weight: 700;
+  background: var(--accent); color: #fff;
+  border-radius: 10px; padding: 1px 6px;
+}
+
+.nav-count.amber { background: #d97706; }
+
+.sidebar-sep { height: 1px; background: var(--border); margin: 8px 12px; }
+
+.sidebar-footer { margin-top: auto; padding: 16px 12px; border-top: 1px solid var(--border); }
+
+.sidebar-user {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 10px; border-radius: 8px; cursor: pointer;
+  transition: background 0.18s;
+}
+.sidebar-user:hover { background: var(--bg); }
+
+.sb-avatar {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--teal));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+
+.sb-name { font-size: 0.83rem; font-weight: 600; color: var(--text); }
+.sb-role { font-size: 0.73rem; color: var(--muted); }
+
+.sb-status {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); margin-left: auto;
+  box-shadow: 0 0 5px rgba(22,163,74,0.4);
+  flex-shrink: 0;
+}
+
+/* ══ MAIN ══ */
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+
+.content { padding: 28px 32px 48px; }
+
+/* Page header */
+.page-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 26px;
+}
+
+.page-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem; font-weight: 400; color: var(--text); margin-bottom: 3px;
+}
+.page-sub { font-size: 0.84rem; color: var(--muted); }
+
+.head-btns { display: flex; gap: 10px; }
+
+.btn-outline {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 8px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem; font-weight: 500; color: var(--text);
+  cursor: pointer; text-decoration: none; transition: all 0.18s;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-primary {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px;
+  background: var(--green); border: none;
+  border-radius: 8px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.84rem; font-weight: 600; color: #fff;
+  cursor: pointer; transition: all 0.18s;
+}
+.btn-primary:hover { background: var(--green2); box-shadow: 0 4px 14px rgba(20,83,45,0.2); }
+
+/* ══ STAT CARDS ══ */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 16px; margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 20px;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  position: relative; overflow: hidden;
+}
+
+.stat-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent, linear-gradient(90deg, var(--accent), var(--teal)));
+}
+
+.stat-card[data-c="blue"]::before { background: linear-gradient(90deg, #2563eb, #0ea5e9); }
+.stat-card[data-c="amber"]::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
+.stat-card[data-c="rose"]::before { background: linear-gradient(90deg, #be123c, #f43f5e); }
+
+.stat-card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 4px 18px rgba(20,83,45,0.07); }
+
+.stat-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.stat-card-label { font-size: 0.77rem; color: var(--muted); }
+
+.stat-card-icon {
+  width: 30px; height: 30px; border-radius: 7px;
+  background: var(--light); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.stat-card[data-c="blue"] .stat-card-icon { background: #eff6ff; color: #2563eb; }
+.stat-card[data-c="amber"] .stat-card-icon { background: #fffbeb; color: #d97706; }
+.stat-card[data-c="rose"] .stat-card-icon { background: #fff1f2; color: #be123c; }
+
+.stat-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.85rem; color: var(--text); line-height: 1;
+  margin-bottom: 6px;
+}
+
+.stat-delta { font-size: 0.77rem; color: var(--accent); font-weight: 600; }
+.stat-delta.neg { color: #be123c; }
+.stat-delta.muted { color: var(--muted); }
+
+/* ══ MAIN GRID ══ */
+.main-grid {
+  display: grid; grid-template-columns: 1fr 320px;
+  gap: 20px; margin-bottom: 22px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 22px;
+}
+
+.card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card-title { font-size: 0.93rem; font-weight: 600; color: var(--text); }
+.card-sub   { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+
+.tabs { display: flex; background: var(--bg); border-radius: 7px; padding: 3px; gap: 2px; }
+
+.tab {
+  padding: 5px 12px; border-radius: 5px;
+  font-size: 0.78rem; font-weight: 500; color: var(--muted);
+  cursor: pointer; border: none; font-family: 'DM Sans', sans-serif;
+  background: none; transition: all 0.18s;
+}
+.tab.active { background: var(--surface); color: var(--green); box-shadow: 0 1px 4px rgba(20,83,45,0.08); }
+.tab:hover:not(.active) { color: var(--text); }
+
+/* Chart */
+.chart-wrap { height: 190px; position: relative; }
+svg.line-chart { width: 100%; height: 100%; }
+
+/* Activity feed */
+.activity-list {}
+
+.activity-item {
+  display: flex; gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom: none; }
+
+.act-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 5px;
+}
+
+.act-title { font-size: 0.84rem; color: var(--text); margin-bottom: 2px; font-weight: 500; }
+.act-meta  { font-size: 0.75rem; color: var(--muted); }
+
+/* ══ BOTTOM GRID ══ */
+.bottom-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Listings table */
+table { width: 100%; border-collapse: collapse; }
+
+thead th {
+  text-align: left; font-size: 0.69rem; font-weight: 600;
+  color: #98b098; text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 0 0 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--warm); }
+
+tbody td { padding: 12px 0; font-size: 0.85rem; color: var(--text); vertical-align: middle; }
+
+.status-pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 0.73rem; font-weight: 600;
+}
+
+.status-pill.live    { background: var(--light); color: var(--green3); }
+.status-pill.pending { background: #fffbeb; color: #d97706; }
+.status-pill.closed  { background: var(--bg2); color: var(--muted); }
+
+.pill-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* Quick actions */
+.actions-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-bottom: 0;
+}
+
+.action-card {
+  display: flex; flex-direction: column; align-items: flex-start;
+  padding: 16px; border: 1.5px solid var(--border);
+  border-radius: 10px; cursor: pointer;
+  transition: all 0.18s; text-decoration: none;
+}
+
+.action-card:hover { border-color: #86efac; background: var(--warm); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(22,163,74,0.08); }
+
+.action-icon {
+  width: 36px; height: 36px; border-radius: 9px;
+  background: var(--light); display: flex; align-items: center;
+  justify-content: center; color: var(--accent); margin-bottom: 10px;
+}
+
+.action-card[data-c="blue"] .action-icon { background: #eff6ff; color: #2563eb; }
+.action-card[data-c="amber"] .action-icon { background: #fffbeb; color: #d97706; }
+.action-card[data-c="teal"] .action-icon { background: #f0fdfc; color: var(--teal); }
+
+.action-label { font-size: 0.84rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.action-desc  { font-size: 0.76rem; color: var(--muted); }
+
+/* Welcome bar */
+.welcome-bar {
+  background: var(--green);
+  padding: 18px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.welcome-text { font-size: 0.88rem; color: rgba(255,255,255,0.75); }
+.welcome-text strong { color: #fff; font-weight: 600; }
+
+.welcome-bar .btn-sm {
+  padding: 7px 14px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 7px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.81rem; font-weight: 500; color: rgba(255,255,255,0.85);
+  cursor: pointer; text-decoration: none;
+  transition: background 0.18s; display: inline-flex; align-items: center; gap: 6px;
+}
+.welcome-bar .btn-sm:hover { background: rgba(255,255,255,0.2); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+.stats-grid { animation: fadeUp 0.35s ease both 0.05s; }
+.main-grid  { animation: fadeUp 0.35s ease both 0.12s; }
+.bottom-grid { animation: fadeUp 0.35s ease both 0.2s; }
+
+@media (max-width: 1024px) {
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .main-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="top-brand">
+    <div class="top-logo">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h12" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="20" cy="18" r="2.5" fill="#fff"/></svg>
+    </div>
+    <div class="top-brand-name">Stock<b>Bridge</b></div>
+  </div>
+
+  <nav class="top-nav">
+    <a href="homepage.html">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="#" class="active">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="#">Marketplace</a>
+    <a href="#">My Listings</a>
+    <a href="#">Deals</a>
+  </nav>
+
+  <div class="top-right">
+    <button class="notif-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <div class="notif-dot"></div>
+    </button>
+    <div class="user-chip">
+      <div class="user-avatar">AJ</div>
+      <span class="user-chip-name">Alex Johnson</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Main</div>
+      <a class="nav-item active" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Overview
+      </a>
+      <a class="nav-item" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Analytics
+      </a>
+      <a class="nav-item" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Marketplace
+        <span class="nav-count">142</span>
+      </a>
+    </div>
+
+    <div class="sidebar-sep"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">My Business</div>
+      <a class="nav-item" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        My Listings
+      </a>
+      <a class="nav-item" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Active Deals
+        <span class="nav-count amber">3</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+        <span class="nav-count">5</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Network
+      </a>
+    </div>
+
+    <div class="sidebar-sep"></div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Account</div>
+      <a class="nav-item" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+      <a class="nav-item" href="login.html" style="color:#be123c;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sb-avatar">AJ</div>
+        <div>
+          <div class="sb-name">Alex Johnson</div>
+          <div class="sb-role">Metro Electronics</div>
+        </div>
+        <div class="sb-status"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div class="welcome-bar">
+      <div>
+        <div class="welcome-text">Good morning, <strong>Alex</strong> 👋 — You have 3 active deals and 5 new messages.</div>
+      </div>
+      <a href="#" class="btn-sm">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Listing
+      </a>
+    </div>
+
+    <div class="content">
+
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-sub">Here's your trading overview for today, Thursday 5 March 2026.</p>
+        </div>
+        <div class="head-btns">
+          <button class="btn-outline">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn-primary">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Listing
+          </button>
+        </div>
+      </div>
+
+      <!-- STATS CARDS -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-head">
+            <span class="stat-card-label">Revenue This Month</span>
+            <div class="stat-card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="stat-val">$42,810</div>
+          <div class="stat-delta">↑ +18.4% from last month</div>
+        </div>
+
+        <div class="stat-card" data-c="blue">
+          <div class="stat-card-head">
+            <span class="stat-card-label">Active Listings</span>
+            <div class="stat-card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            </div>
+          </div>
+          <div class="stat-val">7</div>
+          <div class="stat-delta muted">3 pending review</div>
+        </div>
+
+        <div class="stat-card" data-c="amber">
+          <div class="stat-card-head">
+            <span class="stat-card-label">Deals in Progress</span>
+            <div class="stat-card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+          </div>
+          <div class="stat-val">3</div>
+          <div class="stat-delta" style="color:#d97706;">↑ 1 needs response</div>
+        </div>
+
+        <div class="stat-card" data-c="rose">
+          <div class="stat-card-head">
+            <span class="stat-card-label">Stock Cleared</span>
+            <div class="stat-card-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+          </div>
+          <div class="stat-val">1,840</div>
+          <div class="stat-delta" style="color:#be123c;">Units sold this month</div>
+        </div>
+      </div>
+
+      <!-- MAIN GRID -->
+      <div class="main-grid">
+
+        <!-- Revenue chart -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Revenue Overview</div>
+              <div class="card-sub">Monthly trading performance</div>
+            </div>
+            <div class="tabs">
+              <button class="tab active">7D</button>
+              <button class="tab">1M</button>
+              <button class="tab">3M</button>
+              <button class="tab">YTD</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg class="line-chart" viewBox="0 0 560 180" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="gr1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#16a34a" stop-opacity="0.18"/>
+                  <stop offset="100%" stop-color="#16a34a" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- grid -->
+              <line x1="0" y1="45" x2="560" y2="45" stroke="#d1dbd1" stroke-width="1"/>
+              <line x1="0" y1="90" x2="560" y2="90" stroke="#d1dbd1" stroke-width="1"/>
+              <line x1="0" y1="135" x2="560" y2="135" stroke="#d1dbd1" stroke-width="1"/>
+              <!-- area -->
+              <path d="M0,155 L70,140 L140,120 L210,130 L280,90 L350,70 L420,55 L490,35 L560,20 L560,180 L0,180Z" fill="url(#gr1)"/>
+              <!-- line -->
+              <path d="M0,155 L70,140 L140,120 L210,130 L280,90 L350,70 L420,55 L490,35 L560,20" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- dots -->
+              <circle cx="280" cy="90" r="4" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+              <circle cx="420" cy="55" r="4" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+              <circle cx="560" cy="20" r="4" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Activity -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Recent Activity</div>
+              <div class="card-sub">Last 24 hours</div>
+            </div>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="act-dot" style="background:#16a34a;"></div>
+              <div>
+                <div class="act-title">Deal closed — 200 Samsung units</div>
+                <div class="act-meta">Buyer: TechWholesale NJ · 1h ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#2563eb;"></div>
+              <div>
+                <div class="act-title">New offer received on Polo Shirts</div>
+                <div class="act-meta">$4,200 offer · 3h ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#d97706;"></div>
+              <div>
+                <div class="act-title">Listing approved — Drill Sets</div>
+                <div class="act-meta">80 units · Now live · 5h ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#0d9488;"></div>
+              <div>
+                <div class="act-title">New message from FastStock Ltd</div>
+                <div class="act-meta">Re: bulk pricing inquiry · 8h ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="act-dot" style="background:#be123c;"></div>
+              <div>
+                <div class="act-title">Listing expired — Winter Coats</div>
+                <div class="act-meta">45 units unsold · Renew now</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM GRID -->
+      <div class="bottom-grid">
+
+        <!-- Listings table -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">My Active Listings</div>
+              <div class="card-sub">7 total listings</div>
+            </div>
+            <a href="#" class="btn-outline" style="font-size:0.79rem;padding:6px 12px;">View All</a>
+          </div>
+          <div style="overflow-x:auto;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Units</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:500;">Samsung Galaxy A54</td>
+                  <td style="color:var(--muted)">200</td>
+                  <td style="font-weight:600;color:var(--green3)">$18,200</td>
+                  <td><span class="status-pill live"><span class="pill-dot"></span>Live</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">Polo Shirts Mixed</td>
+                  <td style="color:var(--muted)">500</td>
+                  <td style="font-weight:600;color:var(--green3)">$4,750</td>
+                  <td><span class="status-pill live"><span class="pill-dot"></span>Live</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">Industrial Drill Sets</td>
+                  <td style="color:var(--muted)">80</td>
+                  <td style="font-weight:600;color:var(--green3)">$6,400</td>
+                  <td><span class="status-pill live"><span class="pill-dot"></span>Live</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">Bluetooth Speakers</td>
+                  <td style="color:var(--muted)">120</td>
+                  <td style="font-weight:600;color:var(--green3)">$3,100</td>
+                  <td><span class="status-pill pending"><span class="pill-dot"></span>Pending</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:500;">Kitchen Appliance Set</td>
+                  <td style="color:var(--muted)">40</td>
+                  <td style="font-weight:600;color:var(--green3)">$5,600</td>
+                  <td><span class="status-pill closed"><span class="pill-dot"></span>Closed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-title">Quick Actions</div>
+              <div class="card-sub">Common tasks</div>
+            </div>
+          </div>
+          <div class="actions-grid">
+            <a href="#" class="action-card">
+              <div class="action-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </div>
+              <div class="action-label">New Listing</div>
+              <div class="action-desc">Post surplus stock</div>
+            </a>
+
+            <a href="#" class="action-card" data-c="blue">
+              <div class="action-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              </div>
+              <div class="action-label">Browse Stock</div>
+              <div class="action-desc">Find deals near you</div>
+            </a>
+
+            <a href="#" class="action-card" data-c="amber">
+              <div class="action-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              </div>
+              <div class="action-label">My Deals</div>
+              <div class="action-desc">3 active right now</div>
+            </a>
+
+            <a href="#" class="action-card" data-c="teal">
+              <div class="action-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="action-label">Messages</div>
+              <div class="action-desc">5 unread messages</div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+
+</div><!-- /layout -->
+
+<script>
+// Tabs
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    this.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Nav items
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', function(e) {
+    if (this.getAttribute('href') === '#') {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      this.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -2,14 +2,10 @@ package com.b2bwholesale.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration;
-import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
-
-//Disable JPA auto configuration
-@SpringBootApplication(
-        exclude = {DataSourceAutoConfiguration.class, HibernateJpaAutoConfiguration.class}
-)
+@SpringBootApplication
+@EnableScheduling
 public class B2BWholesaleManagementSystemApplication {
 
     public static void main(String[] args) {
